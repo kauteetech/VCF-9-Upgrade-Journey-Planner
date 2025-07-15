@@ -441,6 +441,7 @@
       let details = '';
       let nextNodeId = 1;
       let lastNodeId = 0; // To track the last node added for connections
+      let verticalSpacing = 100; // Standard spacing between nodes
 
       // Filter droppedComponents to ensure valid objects before checks
       const validDroppedComponents = droppedComponents.filter(c => c && typeof c.name === 'string' && typeof c.version === 'string');
@@ -462,51 +463,95 @@
       lastNodeId = nodes[nodes.length - 1].id;
 
       if (hasVxRail) {
-          nodes.push({ id: nextNodeId++, label: 'Upgrade using VxRail LCM (Unified)', type: 'action', x: 200, y: 150 });
+          nodes.push({ id: nextNodeId++, label: 'Perform VxRail Pre-Upgrade Checks', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
           connections.push([lastNodeId, nodes[nodes.length - 1].id]);
           lastNodeId = nodes[nodes.length - 1].id;
-          details = 'This is an automated, integrated upgrade using the Dell VxRail lifecycle manager, which handles both hardware firmware and VMware software updates in a unified process.';
+          nodes.push({ id: nextNodeId++, label: 'Execute VxRail LCM Upgrade (Unified Process)', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+          connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+          lastNodeId = nodes[nodes.length - 1].id;
+          nodes.push({ id: nextNodeId++, label: 'Perform VxRail Post-Upgrade Validations', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+          connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+          lastNodeId = nodes[nodes.length - 1].id;
+          details = `This is an automated, integrated upgrade using the Dell VxRail lifecycle manager, which handles both hardware firmware and VMware software updates in a unified process. It involves pre-checks, the unified LCM execution, and post-upgrade validations. For detailed steps, refer to the <a href="https://docs.broadcom.com/vxrail-upgrade-guide" target="_blank" class="text-blue-600 hover:underline">official Dell VxRail documentation</a>.`;
       } else if (hasVCF) {
+          nodes.push({ id: nextNodeId++, label: 'Perform VCF Pre-Upgrade Checks', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+          connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+          lastNodeId = nodes[nodes.length - 1].id;
+          details = `Begin with thorough VCF health checks, network validation, DNS/NTP synchronization, and backup procedures. Consult the <a href="https://docs.broadcom.com/vcf-upgrade-guide" target="_blank" class="text-blue-600 hover:underline">VCF Upgrade Guide</a> for a complete pre-check list.`;
+
           if (hasOldVSphere || hasOldVSAN || hasOldNSX) {
-              nodes.push({ id: nextNodeId++, label: 'Intermediate Upgrade to VCF 5.x', type: 'action', x: 200, y: 150 });
+              nodes.push({ id: nextNodeId++, label: 'Intermediate Upgrade to VCF 5.x SDDC Manager', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
               connections.push([lastNodeId, nodes[nodes.length - 1].id]);
               lastNodeId = nodes[nodes.length - 1].id;
-              details = 'Older VCF environments (e.g., 4.x series) require an intermediate upgrade to VCF 5.x (vSphere 8.0, vSAN 8.0, NSX 4.1.x) before proceeding to VCF 9.0. Ensure hardware compatibility for ESXi 8.0.';
+              nodes.push({ id: nextNodeId++, label: 'Upgrade VCF 5.x Management Domain', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+              connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+              lastNodeId = nodes[nodes.length - 1].id;
+              details += ` Older VCF environments (e.g., 4.x series) require an intermediate upgrade to VCF 5.x (vSphere 8.0, vSAN 8.0, NSX 4.1.x) before proceeding to VCF 9.0. Ensure hardware compatibility for ESXi 8.0.`;
           }
-          nodes.push({ id: nextNodeId++, label: 'Upgrade to VCF 9.0 via SDDC Manager', type: 'action', x: 200, y: nodes[nodes.length - 1].y + 100 });
+          
+          nodes.push({ id: nextNodeId++, label: 'Upgrade VCF 9.0 SDDC Manager', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
           connections.push([lastNodeId, nodes[nodes.length - 1].id]);
           lastNodeId = nodes[nodes.length - 1].id;
-          details += (details ? ' ' : '') + 'Direct upgrade from VCF 5.x to VCF 9.0 is fully supported via the SDDC Manager. This process handles core SDDC components and compatible Aria Suite products.';
-          if (hasTanzu || hasAria) {
-              details += ' Existing Tanzu and Aria Suite components will be upgraded as part of the VCF Bill of Materials (BOM).';
-          }
+          
+          nodes.push({ id: nextNodeId++, label: 'Upgrade VCF 9.0 Management Domain', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+          connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+          lastNodeId = nodes[nodes.length - 1].id;
+          
+          nodes.push({ id: nextNodeId++, label: 'Upgrade VCF 9.0 Workload Domains (Optional)', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+          connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+          lastNodeId = nodes[nodes.length - 1].id;
+          
+          nodes.push({ id: nextNodeId++, label: 'Perform VCF Post-Upgrade Validations', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+          connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+          lastNodeId = nodes[nodes.length - 1].id;
+
+          details += ` Direct upgrade from VCF 5.x to VCF 9.0 is fully supported via the SDDC Manager. This process handles core SDDC components and compatible Aria Suite products. Existing Tanzu and Aria Suite components will be upgraded as part of the VCF Bill of Materials (BOM). Always refer to the specific <a href="https://docs.broadcom.com/vcf-release-notes" target="_blank" class="text-blue-600 hover:underline">VCF Release Notes</a> and <a href="https://docs.broadcom.com/vcf-upgrade-guide" target="_blank" class="text-blue-600 hover:underline">VCF Upgrade Guide</a> for your version.`;
       } else { // Standalone environment
-          nodes.push({ id: nextNodeId++, label: 'Upgrade standalone components to VCF 9.0 compatible versions', type: 'action', x: 200, y: 150 });
+          nodes.push({ id: nextNodeId++, label: 'Perform Pre-Upgrade Checks (Compatibility, Health)', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
           connections.push([lastNodeId, nodes[nodes.length - 1].id]);
           lastNodeId = nodes[nodes.length - 1].id;
-          details = 'Your standalone components need to be upgraded to versions compatible with VCF 9.0 (e.g., vSphere 9.0, vSAN 9.0, NSX 4.2.x, Tanzu 2.2, Aria 8.14+).';
+          details = `Ensure your current standalone components meet VCF 9.0 compatibility requirements. Perform health checks, backups, and review the <a href="https://interopmatrix.broadcom.com/Upgrade" target="_blank" class="text-blue-600 hover:underline">Product Interoperability Matrix</a>.`;
+
+          nodes.push({ id: nextNodeId++, label: 'Upgrade vCenter Server', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+          connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+          lastNodeId = nodes[nodes.length - 1].id;
+          details += ` Upgrade your vCenter Server to a version compatible with VCF 9.0 (e.g., vSphere 9.0).`;
+
+          nodes.push({ id: nextNodeId++, label: 'Upgrade ESXi Hosts & vSAN (if applicable)', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+          connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+          lastNodeId = nodes[nodes.length - 1].id;
+          details += ` Upgrade ESXi hosts and vSAN (if present) to VCF 9.0 compatible versions.`;
 
           if (hasNSX) {
-              nodes.push({ id: nextNodeId++, label: 'Import as VI Workload Domain into VCF 9.0', type: 'action', x: 200, y: 250 });
+              nodes.push({ id: nextNodeId++, label: 'Upgrade NSX', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
               connections.push([lastNodeId, nodes[nodes.length - 1].id]);
               lastNodeId = nodes[nodes.length - 1].id;
-              details += ' NSX-enabled standalone environments must be imported as a VI workload domain into an existing VCF 9.0 management domain. This preserves your NSX configuration.';
+              details += ` Upgrade your NSX environment to a version compatible with VCF 9.0.`;
+              
+              nodes.push({ id: nextNodeId++, label: 'Import as VI Workload Domain into VCF 9.0', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+              connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+              lastNodeId = nodes[nodes.length - 1].id;
+              details += ` NSX-enabled standalone environments must be imported as a VI workload domain into an existing VCF 9.0 management domain. This preserves your NSX configuration. See <a href="https://docs.broadcom.com/vcf-import-guide" target="_blank" class="text-blue-600 hover:underline">VCF Import Guide</a>.`;
           } else {
-              nodes.push({ id: nextNodeId++, label: 'Use VCF Installer (Converge to VCF 9.0)', type: 'action', x: 200, y: 250 });
+              if (hasTanzu || hasAria) { // Add specific upgrade for Tanzu/Aria before converge if present
+                 nodes.push({ id: nextNodeId++, label: 'Deploy/Upgrade Aria Suite & Tanzu (if applicable)', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+                 connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+                 lastNodeId = nodes[nodes.length - 1].id;
+                 details += ` Deploy or upgrade your Aria Suite products and Tanzu components to versions compatible with VCF 9.0.`;
+              }
+              nodes.push({ id: nextNodeId++, label: 'Use VCF Installer (Converge to VCF 9.0)', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
               connections.push([lastNodeId, nodes[nodes.length - 1].id]);
               lastNodeId = nodes[nodes.length - 1].id;
-              details += ' Use the VCF Installer to converge your existing vSphere infrastructure into a new VCF 9.0 management domain or workload domain. This is suitable for environments without NSX.';
+              details += ` Use the VCF Installer to converge your existing vSphere infrastructure into a new VCF 9.0 management domain or workload domain. This is suitable for environments without NSX. Refer to the <a href="https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/deployment.html" target="_blank" class="text-blue-600 hover:underline">VCF Deployment Guide</a>.`;
           }
-          if (hasTanzu) {
-              details += ' Tanzu components will be integrated or re-deployed within the VCF environment after convergence/import.';
-          }
-          if (hasAria) {
-              details += ' Aria Suite components will be managed by VCF Operations and Automation after integration.';
-          }
+          nodes.push({ id: nextNodeId++, label: 'Perform Post-Converge/Import Validations', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
+          connections.push([lastNodeId, nodes[nodes.length - 1].id]);
+          lastNodeId = nodes[nodes.length - 1].id;
+          details += ` Post-deployment, ensure all services are running, perform health checks, and integrate any remaining components.`;
       }
 
       // Final VCF 9.0 Environment Node
-      nodes.push({ id: nextNodeId++, label: 'VCF 9.0 Environment', type: 'end', x: 200, y: nodes[nodes.length - 1].y + 100 });
+      nodes.push({ id: nextNodeId++, label: 'VCF 9.0 Environment', type: 'end', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
       connections.push([lastNodeId, nodes[nodes.length - 1].id]);
 
       overviewDiv.innerHTML = `<p class="text-gray-700">${details}</p>`;
@@ -576,7 +621,7 @@
             maintainAspectRatio: false,
             scales: {
               x: { display: false, min: 0, max: 400 },
-              y: { display: false, min: 0, max: 400, reverse: true }
+              y: { display: false, min: 0, max: nodes[nodes.length - 1].y + 100 } /* Dynamically set max Y based on last node */
             },
             plugins: {
               legend: { display: false },
