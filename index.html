@@ -477,7 +477,7 @@
           nodes.push({ id: nextNodeId++, label: 'Perform VCF Pre-Upgrade Checks', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
           connections.push([lastNodeId, nodes[nodes.length - 1].id]);
           lastNodeId = nodes[nodes.length - 1].id;
-          details = `Begin with thorough VCF health checks, network validation, DNS/NTP synchronization, and backup procedures. Consult the <a href="https://docs.broadcom.com/vcf-upgrade-guide" target="_blank" class="text-blue-600 hover:underline">VCF Upgrade Guide</a> for a complete pre-check list.`;
+          details = `Begin with thorough VCF health checks, network validation, DNS/NTP synchronization, and backup procedures. Consult the <a href="https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/deployment/upgrading-cloud-foundation.html" target="_blank" class="text-blue-600 hover:underline">VCF Upgrade Guide</a> for a complete pre-check list.`;
 
           if (hasOldVSphere || hasOldVSAN || hasOldNSX) {
               nodes.push({ id: nextNodeId++, label: 'Intermediate Upgrade to VCF 5.x SDDC Manager', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
@@ -505,7 +505,7 @@
           connections.push([lastNodeId, nodes[nodes.length - 1].id]);
           lastNodeId = nodes[nodes.length - 1].id;
 
-          details += ` Direct upgrade from VCF 5.x to VCF 9.0 is fully supported via the SDDC Manager. This process handles core SDDC components and compatible Aria Suite products. Existing Tanzu and Aria Suite components will be upgraded as part of the VCF Bill of Materials (BOM). Always refer to the specific <a href="https://docs.broadcom.com/vcf-release-notes" target="_blank" class="text-blue-600 hover:underline">VCF Release Notes</a> and <a href="https://docs.broadcom.com/vcf-upgrade-guide" target="_blank" class="text-blue-600 hover:underline">VCF Upgrade Guide</a> for your version.`;
+          details += ` Direct upgrade from VCF 5.x to VCF 9.0 is fully supported via the SDDC Manager. This process handles core SDDC components and compatible Aria Suite products. Existing Tanzu and Aria Suite components will be upgraded as part of the VCF Bill of Materials (BOM). Always refer to the specific <a href="https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/release-notes/vmware-cloud-foundation-90-release-notes.html" target="_blank" class="text-blue-600 hover:underline">VCF Release Notes</a> and <a href="https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/deployment/upgrading-cloud-foundation.html" target="_blank" class="text-blue-600 hover:underline">VCF Upgrade Guide</a> for your version.`;
       } else { // Standalone environment
           nodes.push({ id: nextNodeId++, label: 'Perform Pre-Upgrade Checks (Compatibility, Health)', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
           connections.push([lastNodeId, nodes[nodes.length - 1].id]);
