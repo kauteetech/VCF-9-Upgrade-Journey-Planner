@@ -547,7 +547,7 @@
           nodes.push({ id: nextNodeId++, label: 'Perform Post-Converge/Import Validations', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
           connections.push([lastNodeId, nodes[nodes.length - 1].id]);
           lastNodeId = nodes[nodes.length - 1].id;
-          details += ` Post-deployment, ensure all services are running, perform health checks, and integrate any remaining components.`;
+          details += ` Post-deployment, ensure all services are running, perform health checks, and integrate any remaining components. Use the link for <a href="https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/deployment/converging-your-existing-vsphere-infrastructure-to-a-vcf-or-vvf-platform-/supported-scenarios-to-converge-to-vcf.html" target="_blank" class="text-blue-600 hover:underline"> Supported Deployment Scenarios </a>. `;
       }
 
       // Final VCF 9.0 Environment Node
