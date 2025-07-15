@@ -472,7 +472,7 @@
           nodes.push({ id: nextNodeId++, label: 'Perform VxRail Post-Upgrade Validations', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
           connections.push([lastNodeId, nodes[nodes.length - 1].id]);
           lastNodeId = nodes[nodes.length - 1].id;
-          details = `This is an automated, integrated upgrade using the Dell VxRail lifecycle manager, which handles both hardware firmware and VMware software updates in a unified process. It involves pre-checks, the unified LCM execution, and post-upgrade validations. For detailed steps, refer to the <a href="https://docs.broadcom.com/vxrail-upgrade-guide" target="_blank" class="text-blue-600 hover:underline">official Dell VxRail documentation</a>.`;
+          details = `This is an automated, integrated upgrade using the Dell VxRail lifecycle manager, which handles both hardware firmware and VMware software updates in a unified process. It involves pre-checks, the unified LCM execution, and post-upgrade validations. For detailed steps, refer to the <a href="https://www.dell.com/support/kbdoc/en-in/000021470/vmware-cloud-on-dell-vxrail-vcf-on-vxrail-upgrade-information" target="_blank" class="text-blue-600 hover:underline">official Dell VxRail documentation</a>.`;
       } else if (hasVCF) {
           nodes.push({ id: nextNodeId++, label: 'Perform VCF Pre-Upgrade Checks', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
           connections.push([lastNodeId, nodes[nodes.length - 1].id]);
