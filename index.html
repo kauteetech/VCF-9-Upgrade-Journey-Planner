@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -195,6 +197,33 @@
         transform: translateY(0);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
+
+    /* Reset Button Style (Clarity-like Secondary Button) */
+    .reset-btn {
+        background-color: #6a7c8a; /* Clarity Gray/Secondary Button */
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        margin-top: 10px; /* Space from Show Path button */
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .reset-btn:hover {
+        background-color: #4a5568; /* Darker gray on hover */
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .reset-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
   </style>
 </head>
 <body class="bg-gray-100">
@@ -217,6 +246,7 @@
           <p class="text-gray-500 text-center w-full">Drag components here to build your current environment.</p>
         </div>
         <button id="show-path-button" class="show-path-btn">Show Upgrade Path</button>
+        <button id="reset-button" class="reset-btn">Reset</button>
       </div>
       <!-- Flowchart and Overview -->
       <div class="bg-white p-4 rounded-lg shadow-md col-span-1 md:col-span-1">
@@ -347,6 +377,34 @@
         }
         updateFlowchart();
     });
+
+    // "Reset" button functionality
+    const resetButton = document.getElementById('reset-button');
+    resetButton.addEventListener('click', () => {
+        const dropZone = document.getElementById('customer-environment');
+        const overviewDiv = document.getElementById('overview');
+        const chartContainer = document.getElementById('chart-container');
+        const ctx = document.getElementById('flowchart').getContext('2d');
+
+        // Clear dropped components
+        dropZone.innerHTML = '<p class="text-gray-500 text-center w-full">Drag components here to build your current environment.</p>';
+        
+        // Destroy existing chart if it exists and clear canvas
+        if (window.flowchartInstance) {
+            window.flowchartInstance.destroy();
+            window.flowchartInstance = null; // Clear reference
+        }
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        // Reset overview text
+        overviewDiv.innerHTML = '<p class="text-gray-700">Drop components into "Your Current Environment" and click "Show Upgrade Path".</p>';
+        
+        // Ensure loading state is removed
+        chartContainer.classList.remove('loading');
+
+        showMessage('Environment and upgrade path cleared.');
+    });
+
 
     // Helper to get dropped components
     function getDroppedComponents() {
