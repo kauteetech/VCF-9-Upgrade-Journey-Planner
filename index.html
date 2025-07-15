@@ -531,7 +531,7 @@
               nodes.push({ id: nextNodeId++, label: 'Import as VI Workload Domain into VCF 9.0', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
               connections.push([lastNodeId, nodes[nodes.length - 1].id]);
               lastNodeId = nodes[nodes.length - 1].id;
-              details += ` NSX-enabled standalone environments must be imported as a VI workload domain into an existing VCF 9.0 management domain. This preserves your NSX configuration. See <a href="https://docs.broadcom.com/vcf-import-guide" target="_blank" class="text-blue-600 hover:underline">VCF Import Guide</a>.`;
+              details += ` NSX-enabled standalone environments must be imported as a VI workload domain into an existing VCF 9.0 management domain. This preserves your NSX configuration. See <a href="https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/building-your-private-cloud-infrastructure/working-with-workload-domains/import-an-existing-vcenter-to-create-a-workload-domain.html" target="_blank" class="text-blue-600 hover:underline">VCF Import Guide</a>.`;
           } else {
               if (hasTanzu || hasAria) { // Add specific upgrade for Tanzu/Aria before converge if present
                  nodes.push({ id: nextNodeId++, label: 'Deploy/Upgrade Aria Suite & Tanzu (if applicable)', type: 'action', x: 200, y: nodes[nodes.length - 1].y + verticalSpacing });
